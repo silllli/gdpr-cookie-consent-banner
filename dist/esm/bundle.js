@@ -15,6 +15,12 @@ function is_function(thing) {
 function safe_not_equal(a, b) {
     return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
 }
+function subscribe(component, store, callback) {
+    const unsub = store.subscribe(callback);
+    component.$$.on_destroy.push(unsub.unsubscribe
+        ? () => unsub.unsubscribe()
+        : unsub);
+}
 
 const is_client = typeof window !== 'undefined';
 let now = is_client
@@ -525,6 +531,49 @@ t.parse=o,t.serialize=n;var a=decodeURIComponent,s=encodeURIComponent,u=/; */,f=
 
 var Cookie = unwrapExports(cookieUniversalCommon);
 
+/**
+ * Create a `Writable` store that allows both updating and reading by subscription.
+ * @param {*=}value initial value
+ * @param {StartStopNotifier=}start start and stop notifications for subscriptions
+ */
+function writable(value, start = noop) {
+    let stop;
+    const subscribers = [];
+    function set(new_value) {
+        if (safe_not_equal(value, new_value)) {
+            value = new_value;
+            if (!stop) {
+                return; // not ready
+            }
+            subscribers.forEach((s) => s[1]());
+            subscribers.forEach((s) => s[0](value));
+        }
+    }
+    function update(fn) {
+        set(fn(value));
+    }
+    function subscribe(run, invalidate = noop) {
+        const subscriber = [run, invalidate];
+        subscribers.push(subscriber);
+        if (subscribers.length === 1) {
+            stop = start(set) || noop;
+        }
+        run(value);
+        return () => {
+            const index = subscribers.indexOf(subscriber);
+            if (index !== -1) {
+                subscribers.splice(index, 1);
+            }
+            if (subscribers.length === 0) {
+                stop();
+            }
+        };
+    }
+    return { set, update, subscribe };
+}
+
+const cookiesShown = writable(false);
+
 var validate = function (choice, cookie) {
   const choices = Object.keys(choice);
   const chosen = Object.keys(cookie.choices);
@@ -608,7 +657,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (146:0) {#if shown}
+// (146:0) {#if $cookiesShown}
 function create_if_block_2(ctx) {
 	var div4, div3, div1, div0, p0, t0, t1, p1, t2, div2, button0, t3, t4, button1, t5, div4_transition, current, dispose;
 
@@ -946,7 +995,7 @@ function create_fragment(ctx) {
 
 	var if_block0 = (ctx.showEditIcon) && create_if_block_3(ctx);
 
-	var if_block1 = (ctx.shown) && create_if_block_2(ctx);
+	var if_block1 = (ctx.$cookiesShown) && create_if_block_2(ctx);
 
 	var if_block2 = (ctx.settingsShown) && create_if_block(ctx);
 
@@ -988,7 +1037,7 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (ctx.shown) {
+			if (ctx.$cookiesShown) {
 				if (if_block1) {
 					if_block1.p(changed, ctx);
 					transition_in(if_block1, 1);
@@ -1063,6 +1112,10 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
+	let $cookiesShown;
+
+	subscribe($$self, cookiesShown, $$value => { $cookiesShown = $$value; $$invalidate('$cookiesShown', $cookiesShown); });
+
 	
 
   const dispatch = createEventDispatcher();
@@ -1070,7 +1123,6 @@ function instance($$self, $$props, $$invalidate) {
 
   let { cookieName = null, showEditIcon = true } = $$props;
 
-  let shown = false;
   let settingsShown = false;
 
   let { heading = 'GDPR Notice', description =
@@ -1120,7 +1172,7 @@ function instance($$self, $$props, $$invalidate) {
       execute(cookie.choices);
     } else {
       removeCookie();
-      $$invalidate('shown', shown = true);
+      $cookiesShown = true; cookiesShown.set($cookiesShown);
     }
   });
 
@@ -1152,7 +1204,7 @@ function instance($$self, $$props, $$invalidate) {
         dispatch(`${t}`);
       }
     });
-    $$invalidate('shown', shown = false);
+    $cookiesShown = false; cookiesShown.set($cookiesShown);
   }
 
   function choose () {
@@ -1161,8 +1213,8 @@ function instance($$self, $$props, $$invalidate) {
   }
 
 	function click_handler() {
-		const $$result = (shown = true);
-		$$invalidate('shown', shown);
+		const $$result = ($cookiesShown = true);
+		cookiesShown.set($cookiesShown);
 		return $$result;
 	}
 
@@ -1216,7 +1268,6 @@ function instance($$self, $$props, $$invalidate) {
 	return {
 		cookieName,
 		showEditIcon,
-		shown,
 		settingsShown,
 		heading,
 		description,
@@ -1229,6 +1280,7 @@ function instance($$self, $$props, $$invalidate) {
 		closeLabel,
 		choose,
 		choicesArr,
+		$cookiesShown,
 		click_handler,
 		click_handler_1,
 		input_change_handler,
