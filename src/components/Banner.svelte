@@ -1,5 +1,6 @@
 <script>
   import Cookie from 'cookie-universal'
+  import { cookiesShown } from '../stores'
   import { validate } from '../util'
   import { fade } from 'svelte/transition'
   import { onMount, createEventDispatcher } from 'svelte'
@@ -10,7 +11,6 @@
   export let cookieName = null
   export let showEditIcon = true
 
-  let shown = false
   let settingsShown = false
 
   export let heading = 'GDPR Notice'
@@ -80,7 +80,7 @@
       execute(cookie.choices)
     } else {
       removeCookie()
-      shown = true
+      $cookiesShown = true
     }
   })
 
@@ -112,7 +112,7 @@
         dispatch(`${t}`)
       }
     })
-    shown = false
+    $cookiesShown = false
   }
 
   function choose () {
@@ -124,7 +124,7 @@
 {#if showEditIcon}
   <button
     class="cookieConsentToggle"
-    on:click={() => (shown = true)}
+    on:click={() => ($cookiesShown = true)}
     transition:fade={{ duration: 100 }}>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path
@@ -143,7 +143,7 @@
   </button>
 {/if}
 
-{#if shown}
+{#if $cookiesShown}
 <div class="cookieConsentWrapper" transition:fade={{ duration: 100 }}>
   <div class="cookieConsent">
     <div class="cookieConsent__Left">
