@@ -56,7 +56,8 @@
 
 .cookieConsent__Right {
   display: flex;
-  align-items: flex-end; }
+  align-items: flex-end;
+  flex-wrap: wrap; }
 
 .cookieConsentOperations {
   position: fixed;
