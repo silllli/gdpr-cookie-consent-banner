@@ -583,7 +583,7 @@ function create_if_block_3(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150 }, true);
+				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 100 }, true);
 				button_transition.run(1);
 			});
 
@@ -591,7 +591,7 @@ function create_if_block_3(ctx) {
 		},
 
 		o(local) {
-			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150 }, false);
+			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 100 }, false);
 			button_transition.run(0);
 
 			current = false;
@@ -688,7 +688,7 @@ function create_if_block_2(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150 }, true);
+				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 100 }, true);
 				div4_transition.run(1);
 			});
 
@@ -696,7 +696,7 @@ function create_if_block_2(ctx) {
 		},
 
 		o(local) {
-			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150 }, false);
+			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 100 }, false);
 			div4_transition.run(0);
 
 			current = false;
@@ -788,7 +788,7 @@ function create_if_block(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150 }, true);
+				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 100 }, true);
 				div1_transition.run(1);
 			});
 
@@ -796,7 +796,7 @@ function create_if_block(ctx) {
 		},
 
 		o(local) {
-			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150 }, false);
+			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 100 }, false);
 			div1_transition.run(0);
 
 			current = false;
