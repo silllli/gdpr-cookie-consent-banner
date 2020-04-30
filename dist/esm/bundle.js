@@ -553,7 +553,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (125:0) {#if showEditIcon}
+// (124:0) {#if showEditIcon}
 function create_if_block_3(ctx) {
 	var button, button_transition, current, dispose;
 
@@ -583,7 +583,7 @@ function create_if_block_3(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, {}, true);
+				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150 }, true);
 				button_transition.run(1);
 			});
 
@@ -591,7 +591,7 @@ function create_if_block_3(ctx) {
 		},
 
 		o(local) {
-			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, {}, false);
+			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150 }, false);
 			button_transition.run(0);
 
 			current = false;
@@ -608,7 +608,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (147:0) {#if shown}
+// (146:0) {#if shown}
 function create_if_block_2(ctx) {
 	var div4, div3, div1, div0, p0, t0, t1, p1, t2, div2, button0, t3, t4, button1, t5, div4_transition, current, dispose;
 
@@ -688,7 +688,7 @@ function create_if_block_2(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, {}, true);
+				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150 }, true);
 				div4_transition.run(1);
 			});
 
@@ -696,7 +696,7 @@ function create_if_block_2(ctx) {
 		},
 
 		o(local) {
-			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, {}, false);
+			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150 }, false);
 			div4_transition.run(0);
 
 			current = false;
@@ -713,7 +713,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (173:0) {#if settingsShown}
+// (172:0) {#if settingsShown}
 function create_if_block(ctx) {
 	var div1, div0, t0, button, t1, div1_transition, current, dispose;
 
@@ -788,7 +788,7 @@ function create_if_block(ctx) {
 		i(local) {
 			if (current) return;
 			add_render_callback(() => {
-				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, true);
+				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150 }, true);
 				div1_transition.run(1);
 			});
 
@@ -796,7 +796,7 @@ function create_if_block(ctx) {
 		},
 
 		o(local) {
-			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, false);
+			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150 }, false);
 			div1_transition.run(0);
 
 			current = false;
@@ -818,7 +818,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (177:6) {#if choicesMerged.hasOwnProperty(choice.id) && choicesMerged[choice.id]}
+// (176:6) {#if choicesMerged.hasOwnProperty(choice.id) && choicesMerged[choice.id]}
 function create_if_block_1(ctx) {
 	var div, input, input_id_value, input_disabled_value, t0, label, t1_value = ctx.choice.label, t1, label_for_value, t2, span, t3_value = ctx.choice.description, t3, dispose;
 
@@ -899,7 +899,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (176:4) {#each choicesArr as choice}
+// (175:4) {#each choicesArr as choice}
 function create_each_block(ctx) {
 	var if_block_anchor;
 
