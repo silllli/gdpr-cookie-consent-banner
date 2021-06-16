@@ -76,12 +76,16 @@ I've documented our usage of it below:
 
 Just use it as a regular svelte component:
 
-```html
-<GdprBanner cookieName="foo" description="bar" on:analytics="this.someFunction()" />
+```svelte
+<GdprBanner cookieName="foo" description="bar" on:analytics={initAnalytics} />
 
 <script>
   import '@beyonk/gdpr-cookie-consent-banner/dist/style.css' // optional, you can also define your own styles
   import GdprBanner from '@beyonk/gdpr-cookie-consent-banner'
+  
+  function initAnalytics () {
+    // do something with segment.io or google analytics etc
+  }
 </script>
 ```
 
@@ -117,6 +121,22 @@ Optionally, add this to your CSS array in your `nuxt.config.js` file:
  * Global CSS
  **/
 css: ['your_other_css_file.css', '@beyonk/gdpr-cookie-consent-banner/dist/style.css'],
+```
+
+### Methods
+
+You can re-call the cookie banner from an external link by binding the component instance and calling `show()` on it.
+
+```svelte
+<GdprBanner bind:this={gdprBanner} cookieName="foo" description="bar" on:analytics={initAnalytics} />
+
+<script>
+  import GdprBanner from '@beyonk/gdpr-cookie-consent-banner'
+
+  let gdprBanner
+  
+  gdprBanner.show()
+</script>
 ```
 
 ### Configuration

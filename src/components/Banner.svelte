@@ -1,6 +1,5 @@
 <script>
   import Cookie from 'cookie-universal'
-  import { cookiesShown } from '../stores'
   import { validate } from '../util'
   import { fade } from 'svelte/transition'
   import { onMount, createEventDispatcher } from 'svelte'
@@ -11,6 +10,7 @@
   export let cookieName = null
   export let showEditIcon = true
 
+  let shown = false
   let settingsShown = false
 
   export let heading = 'GDPR Notice'
@@ -18,10 +18,10 @@
     'We use cookies to offer a better browsing experience, analyze site traffic, personalize content, and serve targeted advertisements. Please review our privacy policy & cookies information page. By clicking accept, you consent to our privacy policy & use of cookies.'
 
   export let categories = {
-    analytics: function() {},
-    tracking: function() {},
-    marketing: function() {},
-    necessary: function() {}
+    analytics: function () {},
+    tracking: function () {},
+    marketing: function () {},
+    necessary: function () {}
   }
 
   export let cookieConfig = {}
@@ -51,7 +51,7 @@
     }
   }
 
-  const choicesMerged = Object.assign({}, choicesDefaults, choices)
+  $: choicesMerged = Object.assign({}, choicesDefaults, choices)
 
   $: choicesArr = Object.values(choicesMerged).map((item, index) => {
     return Object.assign(
@@ -61,7 +61,7 @@
     )
   })
   
-  $: cookieChoices = choicesArr.reduce(function(result, item, index, array) {
+  $: cookieChoices = choicesArr.reduce((result, item, index, array) => {
     result[item.id] = item.value ? item.value : false
     return result
   }, {})
@@ -70,9 +70,13 @@
   export let settingsLabel = 'Cookie settings'
   export let closeLabel = 'Close settings'
 
+  export function show () {
+    shown = true
+  }
+
   onMount(() => {
     if (!cookieName) {
-      throw 'You must set gdpr cookie name'
+      throw new Error('You must set gdpr cookie name')
     }
 
     const cookie = cookies.get(cookieName)
@@ -80,7 +84,7 @@
       execute(cookie.choices)
     } else {
       removeCookie()
-      $cookiesShown = true
+      show()
     }
   })
 
@@ -106,13 +110,15 @@
 
     types.forEach(t => {
       const agreed = chosen[t]
-      choicesMerged[t] ? (choicesMerged[t].value = agreed) : false
+      if (choicesMerged[t]) {
+        choicesMerged[t].value = agreed
+      }
       if (agreed) {
-        categories[t]()
+        categories[t] && categories[t]()
         dispatch(`${t}`)
       }
     })
-    $cookiesShown = false
+    shown = false
   }
 
   function choose () {
@@ -124,8 +130,8 @@
 {#if showEditIcon}
   <button
     class="cookieConsentToggle"
-    on:click={() => ($cookiesShown = true)}
-    transition:fade={{ duration: 100 }}>
+    on:click={show}
+    transition:fade>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path
         d="M510.52 255.82c-69.97-.85-126.47-57.69-126.47-127.86-70.17
@@ -143,8 +149,8 @@
   </button>
 {/if}
 
-{#if $cookiesShown}
-<div class="cookieConsentWrapper" transition:fade={{ duration: 100 }}>
+{#if shown}
+<div class="cookieConsentWrapper" transition:fade>
   <div class="cookieConsent">
     <div class="cookieConsent__Left">
       <div class="cookieConsent__Content">
@@ -158,7 +164,7 @@
       <button
         type="button"
         class="cookieConsent__Button"
-        on:click={() => settingsShown = true}>
+        on:click={() => { settingsShown = true } }>
         {settingsLabel}
       </button>
       <button type="submit" class="cookieConsent__Button" on:click={choose}>
@@ -170,10 +176,10 @@
 {/if}
 
 {#if settingsShown}
-<div class="cookieConsentOperations" transition:fade={{ duration: 100 }}>
+<div class="cookieConsentOperations" transition:fade>
   <div class="cookieConsentOperations__List">
     {#each choicesArr as choice}
-      {#if choicesMerged.hasOwnProperty(choice.id) && choicesMerged[choice.id]}
+      {#if Object.hasOwnProperty.call(choicesMerged, choice.id) && choicesMerged[choice.id]}
         <div
           class="cookieConsentOperations__Item"
           class:disabled={choice.id === 'necessary'}>
@@ -192,7 +198,7 @@
     <button
       type="submit"
       class="cookieConsent__Button cookieConsent__Button--Close"
-      on:click={() => settingsShown = false}>
+      on:click={() => { settingsShown = false } }>
       {closeLabel}
     </button>
   </div>
