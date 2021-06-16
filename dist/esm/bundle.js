@@ -556,6 +556,10 @@ var validate = function (choice, cookie) {
   return chosen.every(c => choices.includes(c))
 };
 
+function sineInOut(t) {
+    return -0.5 * (Math.cos(Math.PI * t) - 1);
+}
+
 function fade(node, { delay = 0, duration = 400, easing = identity } = {}) {
     const o = +getComputedStyle(node).opacity;
     return {
@@ -576,7 +580,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (130:0) {#if showEditIcon}
+// (131:0) {#if showEditIcon}
 function create_if_block_3(ctx) {
 	let button;
 	let button_transition;
@@ -611,19 +615,21 @@ function create_if_block_3(ctx) {
 				mounted = true;
 			}
 		},
-		p: noop,
+		p(new_ctx, dirty) {
+			ctx = new_ctx;
+		},
 		i(local) {
 			if (current) return;
 
 			add_render_callback(() => {
-				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, {}, true);
+				if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150, easing: sineInOut }, true);
 				button_transition.run(1);
 			});
 
 			current = true;
 		},
 		o(local) {
-			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, {}, false);
+			if (!button_transition) button_transition = create_bidirectional_transition(button, fade, { duration: 150, easing: sineInOut }, false);
 			button_transition.run(0);
 			current = false;
 		},
@@ -636,7 +642,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (152:0) {#if shown}
+// (153:0) {#if shown}
 function create_if_block_2(ctx) {
 	let div4;
 	let div3;
@@ -715,7 +721,8 @@ function create_if_block_2(ctx) {
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
+		p(new_ctx, dirty) {
+			ctx = new_ctx;
 			if (!current || dirty & /*heading*/ 2) set_data(t0, /*heading*/ ctx[1]);
 			if (!current || dirty & /*description*/ 4) p1.innerHTML = /*description*/ ctx[2];			if (!current || dirty & /*settingsLabel*/ 16) set_data(t3, /*settingsLabel*/ ctx[4]);
 			if (!current || dirty & /*acceptLabel*/ 8) set_data(t5, /*acceptLabel*/ ctx[3]);
@@ -724,14 +731,14 @@ function create_if_block_2(ctx) {
 			if (current) return;
 
 			add_render_callback(() => {
-				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, {}, true);
+				if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150, easing: sineInOut }, true);
 				div4_transition.run(1);
 			});
 
 			current = true;
 		},
 		o(local) {
-			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, {}, false);
+			if (!div4_transition) div4_transition = create_bidirectional_transition(div4, fade, { duration: 150, easing: sineInOut }, false);
 			div4_transition.run(0);
 			current = false;
 		},
@@ -744,7 +751,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (178:0) {#if settingsShown}
+// (181:0) {#if settingsShown}
 function create_if_block(ctx) {
 	let div1;
 	let div0;
@@ -797,7 +804,9 @@ function create_if_block(ctx) {
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
+		p(new_ctx, dirty) {
+			ctx = new_ctx;
+
 			if (dirty & /*choicesArr, choicesMerged, Object*/ 384) {
 				each_value = /*choicesArr*/ ctx[8];
 				let i;
@@ -827,14 +836,14 @@ function create_if_block(ctx) {
 			if (current) return;
 
 			add_render_callback(() => {
-				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, true);
+				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150, easing: sineInOut }, true);
 				div1_transition.run(1);
 			});
 
 			current = true;
 		},
 		o(local) {
-			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, false);
+			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, { duration: 150, easing: sineInOut }, false);
 			div1_transition.run(0);
 			current = false;
 		},
@@ -848,7 +857,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (182:6) {#if Object.hasOwnProperty.call(choicesMerged, choice.id) && choicesMerged[choice.id]}
+// (187:6) {#if Object.hasOwnProperty.call(choicesMerged, choice.id) && choicesMerged[choice.id]}
 function create_if_block_1(ctx) {
 	let div;
 	let input;
@@ -939,7 +948,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (181:4) {#each choicesArr as choice}
+// (186:4) {#each choicesArr as choice}
 function create_each_block(ctx) {
 	let show_if = Object.hasOwnProperty.call(/*choicesMerged*/ ctx[7], /*choice*/ ctx[27].id) && /*choicesMerged*/ ctx[7][/*choice*/ ctx[27].id];
 	let if_block_anchor;
