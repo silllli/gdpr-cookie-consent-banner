@@ -131,7 +131,7 @@
   <button
     class="cookieConsentToggle"
     on:click={show}
-    transition:fade>
+    transition:fade={{ duration: 150 }}>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path
         d="M510.52 255.82c-69.97-.85-126.47-57.69-126.47-127.86-70.17
@@ -150,7 +150,7 @@
 {/if}
 
 {#if shown}
-<div class="cookieConsentWrapper" transition:fade>
+<div class="cookieConsentWrapper" transition:fade={{ duration: 150 }}>
   <div class="cookieConsent">
     <div class="cookieConsent__Left">
       <div class="cookieConsent__Content">
@@ -176,7 +176,7 @@
 {/if}
 
 {#if settingsShown}
-<div class="cookieConsentOperations" transition:fade>
+<div class="cookieConsentOperations" transition:fade={{ duration: 150 }}>
   <div class="cookieConsentOperations__List">
     {#each choicesArr as choice}
       {#if Object.hasOwnProperty.call(choicesMerged, choice.id) && choicesMerged[choice.id]}
